@@ -216,5 +216,47 @@ print("Results:", results)
 # - executor.map(work, range(6)): Assigns numbers 0–5 to the workers.
 
 
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Example 6
+#using ProcessPoolExecutor
+
+import concurrent.futures
+import math
+
+PRIMES = [
+    112272535095293,
+    112582705942171,
+    112272535095293,
+    115280095190773,
+    115797848077099,
+    1099726899285419]
+
+def is_prime(n):
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+
+    sqrt_n = int(math.floor(math.sqrt(n)))
+    for i in range(3, sqrt_n + 1, 2):
+        if n % i == 0:
+            return False
+    return True
+
+def main():
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+
+        #for each "number" in PRIMES
+        #"prime" is the boolean value of "is_prime" on that number
+        #zip(PRIMES, executor.map(...)) pairs each original number with its corresponding result (True/False) from the is_prime() function.
+        for number, prime in zip(PRIMES, executor.map(is_prime, PRIMES)):
+            print('%d is prime: %s' % (number, prime))
+
+if __name__ == '__main__':
+    main()
+
+
 
 
